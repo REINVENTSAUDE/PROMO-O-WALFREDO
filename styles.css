@@ -1,0 +1,75 @@
+/* style.css */
+:root {
+    --bg-dark: #00050f;
+    --blue-neon: #00d4ff;
+    --orange-neon: #ff9d00;
+    --glass: rgba(255, 255, 255, 0.05);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: url('fundo_site.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.background-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(0,20,50,0.6) 0%, rgba(0,5,15,0.9) 100%);
+    z-index: -1;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px;
+    align-items: center;
+}
+
+.dashboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex: 1;
+    padding: 20px;
+}
+
+.painel {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.side { width: 25%; border-bottom: 4px solid var(--blue-neon); }
+.central { 
+    width: 40%; 
+    border: 2px solid var(--orange-neon);
+    box-shadow: 0 0 20px rgba(255, 157, 0, 0.3);
+}
+
+.nome-grande { font-size: 80px; color: white; margin: 10px 0; text-transform: uppercase; }
+.horario-grande { font-size: 60px; color: var(--orange-neon); font-weight: bold; }
+
+footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-item { font-size: 14px; letter-spacing: 1px; opacity: 0.8; }
+
+/* Ajustes de responsividade */
+h3 { font-size: 18px; letter-spacing: 2px; color: var(--blue-neon); }
