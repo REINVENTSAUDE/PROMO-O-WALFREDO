@@ -79,3 +79,13 @@ h3 { font-size: 18px; letter-spacing: 2px; color: var(--blue-neon); }
     width: auto !important;
     display: block;
 }
+.fade-in {
+    animation: fadeInAnimation 1.5s ease-in-out;
+}
+
+@keyframes fadeInAnimation {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Aplique a classe .fade-in nos elementos que você quer que animem */
