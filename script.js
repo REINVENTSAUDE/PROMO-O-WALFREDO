@@ -16,50 +16,45 @@ async function atualizarDados() {
 
         const linhas = csvText
             .trim()
-            .split("\n")
-            .filter(linha => linha.trim() !== "");
+            .split('\n')
+            .filter(linha => linha.trim() !== '');
 
-        if (linhas.length === 0) return;
+        if (linhas.length < 2) return;
 
-        // Remove cabeçalho se existir
+        // Remove o cabeçalho
         const dados = linhas.slice(1);
-
-        if (dados.length === 0) return;
 
         // Último registro
         const ultimaLinha = dados[dados.length - 1]
-            ? dados[dados.length - 1].split(",")
-            : ["--", "--", "--"];
+            ? dados[dados.length - 1].split(',')
+            : ["--", "--", "--", "--"];
 
         // Penúltimo registro
         const penultimaLinha = dados[dados.length - 2]
-            ? dados[dados.length - 2].split(",")
-            : ["--", "--", "--"];
+            ? dados[dados.length - 2].split(',')
+            : ["--", "--", "--", "--"];
 
         // =========================
-        // AJUSTE DAS COLUNAS
+        // DADOS ATUAIS
         // =========================
-        // ALTERE AQUI SE NECESSÁRIO
 
         const nomeAtual = ultimaLinha[0] || "--";
-        const dataAtual = ultimaLinha[1] || "--";
-        const clienteAtual = ultimaLinha[2] || "--";
+        const dataAtual = `${ultimaLinha[1] || "--"} ${ultimaLinha[2] || ""}`;
+        const clienteAtual = ultimaLinha[3] || "--";
 
         const nomeAnterior = penultimaLinha[0] || "--";
-        const dataAnterior = penultimaLinha[1] || "--";
-        const clienteAnterior = penultimaLinha[2] || "--";
+        const dataAnterior = `${penultimaLinha[1] || "--"} ${penultimaLinha[2] || ""}`;
+        const clienteAnterior = penultimaLinha[3] || "--";
 
         // =========================
-        // MONITORAR
+        // ABA MONITORAR
         // =========================
 
-        const monitorAtual = document.querySelector(
-            "#monitorar-atual .nome-grande"
-        );
+        const monitorAtual =
+            document.querySelector('#monitorar-atual .nome-grande');
 
-        const monitorAnterior = document.querySelector(
-            "#monitorar-anterior .nome"
-        );
+        const monitorAnterior =
+            document.querySelector('#monitorar-anterior .nome');
 
         if (monitorAtual) {
             monitorAtual.innerText = nomeAtual;
@@ -70,17 +65,19 @@ async function atualizarDados() {
         }
 
         // =========================
-        // CONTEMPLADO
+        // ABA SORTEIO
         // =========================
 
+        // CONTEMPLADO
+
         const contempladoNome =
-            document.querySelector("#contemplado .nome-grande");
+            document.querySelector('#contemplado .nome-grande');
 
         const contempladoData =
-            document.querySelector("#contemplado .horario-grande");
+            document.querySelector('#contemplado .horario-grande');
 
         const contempladoCliente =
-            document.getElementById("cliente");
+            document.getElementById('cliente');
 
         if (contempladoNome) {
             contempladoNome.innerText = nomeAtual;
@@ -94,18 +91,16 @@ async function atualizarDados() {
             contempladoCliente.innerText = clienteAtual;
         }
 
-        // =========================
         // ANTERIOR
-        // =========================
 
         const anteriorNome =
-            document.querySelector("#anterior .nome");
+            document.querySelector('#anterior .nome');
 
         const anteriorData =
-            document.querySelector("#anterior .horario");
+            document.querySelector('#anterior .horario');
 
         const anteriorCliente =
-            document.querySelector("#anterior .cliente");
+            document.querySelector('#anterior .cliente');
 
         if (anteriorNome) {
             anteriorNome.innerText = nomeAnterior;
@@ -119,18 +114,17 @@ async function atualizarDados() {
             anteriorCliente.innerText = clienteAnterior;
         }
 
-        // =========================
         // POSTERIOR
-        // =========================
+        // Mantido vazio por enquanto
 
         const posteriorNome =
-            document.querySelector("#posterior .nome");
+            document.querySelector('#posterior .nome');
 
         const posteriorData =
-            document.querySelector("#posterior .horario");
+            document.querySelector('#posterior .horario');
 
         const posteriorCliente =
-            document.querySelector("#posterior .cliente");
+            document.querySelector('#posterior .cliente');
 
         if (posteriorNome) {
             posteriorNome.innerText = "--";
@@ -150,32 +144,32 @@ async function atualizarDados() {
 }
 
 // =========================
-// TROCAR TELA
+// TROCAR DE TELA
 // =========================
 
 function trocarModo(modo) {
 
     const dashboard =
-        document.getElementById("dashboard-container");
+        document.getElementById('dashboard-container');
 
     const sorteio =
-        document.getElementById("sorteio-container");
+        document.getElementById('sorteio-container');
 
-    if (modo === "sorteio") {
+    if (modo === 'sorteio') {
 
-        dashboard.style.display = "none";
+        dashboard.style.display = 'none';
 
-        sorteio.style.display = "flex";
+        sorteio.style.display = 'flex';
 
-        sorteio.classList.add("ativo");
+        sorteio.classList.add('ativo');
 
     } else {
 
-        dashboard.style.display = "flex";
+        dashboard.style.display = 'flex';
 
-        sorteio.style.display = "none";
+        sorteio.style.display = 'none';
 
-        sorteio.classList.remove("ativo");
+        sorteio.classList.remove('ativo');
     }
 }
 
@@ -187,8 +181,8 @@ function atualizarRelogio() {
 
     const agora = new Date();
 
-    document.getElementById("clock").innerText =
-        agora.toLocaleTimeString("pt-BR");
+    document.getElementById('clock').innerText =
+        agora.toLocaleTimeString('pt-BR');
 }
 
 // =========================
