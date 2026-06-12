@@ -1,14 +1,10 @@
-// =========================
-// LINK DA PLANILHA CSV
-// =========================
-
 const URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS88kNt-4n-CG_qsh1rl-G6DrZwJdFQNQ58711RlaDHNGympfu0m4GgJhUQv8PlrWx92yrudimbdu96/pub?gid=2072951796&single=true&output=csv";
 
-// =========================
-// BUSCAR DADOS
-// =========================
+// ========================
+// MONITORAR
+// ========================
 
-async function atualizarDados() {
+async function atualizarMonitorar() {
     try {
 
         const resposta = await fetch(URL_CSV + "&t=" + Date.now());
@@ -17,165 +13,193 @@ async function atualizarDados() {
         const linhas = csvText
             .trim()
             .split('\n')
-            .filter(linha => linha.trim() !== '');
+            .filter(l => l.trim() !== '');
 
-        if (linhas.length < 2) return;
-
-        // Remove o cabeçalho
         const dados = linhas.slice(1);
 
-        // Último registro
-        const ultimaLinha = dados[dados.length - 1]
-            ? dados[dados.length - 1].split(',')
-            : ["--", "--", "--", "--"];
+        if (dados.length === 0) return;
 
-        // Penúltimo registro
+        const ultimaLinha = dados[dados.length - 1].split(',');
         const penultimaLinha = dados[dados.length - 2]
             ? dados[dados.length - 2].split(',')
-            : ["--", "--", "--", "--"];
+            : ["--","--","--","--"];
 
-        // =========================
-        // DADOS ATUAIS
-        // =========================
+        document.querySelector('#monitorar-atual .nome-grande').innerText =
+            ultimaLinha[0] || "--";
 
-        const nomeAtual = ultimaLinha[0] || "--";
-        const dataAtual = `${ultimaLinha[1] || "--"} ${ultimaLinha[2] || ""}`;
-        const clienteAtual = ultimaLinha[3] || "--";
-
-        const nomeAnterior = penultimaLinha[0] || "--";
-        const dataAnterior = `${penultimaLinha[1] || "--"} ${penultimaLinha[2] || ""}`;
-        const clienteAnterior = penultimaLinha[3] || "--";
-
-        // =========================
-        // ABA MONITORAR
-        // =========================
-
-        const monitorAtual =
-            document.querySelector('#monitorar-atual .nome-grande');
-
-        const monitorAnterior =
-            document.querySelector('#monitorar-anterior .nome');
-
-        if (monitorAtual) {
-            monitorAtual.innerText = nomeAtual;
-        }
-
-        if (monitorAnterior) {
-            monitorAnterior.innerText = nomeAnterior;
-        }
-
-        // =========================
-        // ABA SORTEIO
-        // =========================
-
-        // CONTEMPLADO
-
-        const contempladoNome =
-            document.querySelector('#contemplado .nome-grande');
-
-        const contempladoData =
-            document.querySelector('#contemplado .horario-grande');
-
-        const contempladoCliente =
-            document.getElementById('cliente');
-
-        if (contempladoNome) {
-            contempladoNome.innerText = nomeAtual;
-        }
-
-        if (contempladoData) {
-            contempladoData.innerText = dataAtual;
-        }
-
-        if (contempladoCliente) {
-            contempladoCliente.innerText = clienteAtual;
-        }
-
-        // ANTERIOR
-
-        const anteriorNome =
-            document.querySelector('#anterior .nome');
-
-        const anteriorData =
-            document.querySelector('#anterior .horario');
-
-        const anteriorCliente =
-            document.querySelector('#anterior .cliente');
-
-        if (anteriorNome) {
-            anteriorNome.innerText = nomeAnterior;
-        }
-
-        if (anteriorData) {
-            anteriorData.innerText = dataAnterior;
-        }
-
-        if (anteriorCliente) {
-            anteriorCliente.innerText = clienteAnterior;
-        }
-
-        // POSTERIOR
-        // Mantido vazio por enquanto
-
-        const posteriorNome =
-            document.querySelector('#posterior .nome');
-
-        const posteriorData =
-            document.querySelector('#posterior .horario');
-
-        const posteriorCliente =
-            document.querySelector('#posterior .cliente');
-
-        if (posteriorNome) {
-            posteriorNome.innerText = "--";
-        }
-
-        if (posteriorData) {
-            posteriorData.innerText = "--";
-        }
-
-        if (posteriorCliente) {
-            posteriorCliente.innerText = "--";
-        }
+        document.querySelector('#monitorar-anterior .nome').innerText =
+            penultimaLinha[0] || "--";
 
     } catch (erro) {
-        console.error("Erro ao buscar dados:", erro);
+        console.error("Erro:", erro);
     }
 }
 
-// =========================
-// TROCAR DE TELA
-// =========================
+// ========================
+// SORTEIO
+// ========================
+
+async function buscarSorteio() {
+
+    const dataPesquisa = document.getElementById('input-data').value;
+    const horaPesquisa = document.getElementById('input-hora').value;
+
+    if (!dataPesquisa || !horaPesquisa) {
+        alert("Informe data e hora.");
+        return;
+    }
+
+    try {
+
+        const resposta = await fetch(URL_CSV + "&t=" + Date.now());
+        const csvText = await resposta.text();
+
+        const linhas = csvText
+            .trim()
+            .split('\n')
+            .filter(l => l.trim() !== '');
+
+        const dados = linhas.slice(1).map(l => l.split(','));
+
+        // yyyy-mm-dd -> dd/mm/yyyy
+        const partes = dataPesquisa.split('-');
+
+        const dataFormatada =
+            `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+        let indiceContemplado = -1;
+
+        for (let i = 0; i < dados.length; i++) {
+
+            const dataLinha = dados[i][1];
+            const horaLinha = dados[i][2];
+
+            if (
+                dataLinha === dataFormatada &&
+                horaLinha <= horaPesquisa
+            ) {
+                indiceContemplado = i;
+            }
+        }
+
+        if (indiceContemplado === -1) {
+
+            alert("Nenhum registro encontrado.");
+
+            return;
+        }
+
+        const contemplado = dados[indiceContemplado];
+
+        const anterior =
+            indiceContemplado > 0
+                ? dados[indiceContemplado - 1]
+                : null;
+
+        const posterior =
+            indiceContemplado < dados.length - 1
+                ? dados[indiceContemplado + 1]
+                : null;
+
+        // ===================
+        // CONTEMPLADO
+        // ===================
+
+        document.querySelector(
+            '#contemplado .nome-grande'
+        ).innerText = contemplado[0];
+
+        document.querySelector(
+            '#contemplado .horario-grande'
+        ).innerText = `${contemplado[1]} ${contemplado[2]}`;
+
+        document.getElementById(
+            'cliente'
+        ).innerText = contemplado[3];
+
+        // ===================
+        // ANTERIOR
+        // ===================
+
+        document.querySelector(
+            '#anterior .nome'
+        ).innerText =
+            anterior ? anterior[0] : "--";
+
+        document.querySelector(
+            '#anterior .horario'
+        ).innerText =
+            anterior
+                ? `${anterior[1]} ${anterior[2]}`
+                : "--";
+
+        document.querySelector(
+            '#anterior .cliente'
+        ).innerText =
+            anterior ? anterior[3] : "--";
+
+        // ===================
+        // POSTERIOR
+        // ===================
+
+        document.querySelector(
+            '#posterior .nome'
+        ).innerText =
+            posterior ? posterior[0] : "--";
+
+        document.querySelector(
+            '#posterior .horario'
+        ).innerText =
+            posterior
+                ? `${posterior[1]} ${posterior[2]}`
+                : "--";
+
+        document.querySelector(
+            '#posterior .cliente'
+        ).innerText =
+            posterior ? posterior[3] : "--";
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        alert("Erro ao buscar dados.");
+    }
+}
+
+// ========================
+// TROCAR TELAS
+// ========================
 
 function trocarModo(modo) {
 
-    const dashboard =
+    const dash =
         document.getElementById('dashboard-container');
 
-    const sorteio =
+    const sort =
         document.getElementById('sorteio-container');
 
     if (modo === 'sorteio') {
 
-        dashboard.style.display = 'none';
+        dash.style.display = 'none';
 
-        sorteio.style.display = 'flex';
+        sort.style.display = 'flex';
 
-        sorteio.classList.add('ativo');
+        sort.classList.add('ativo');
 
     } else {
 
-        dashboard.style.display = 'flex';
+        dash.style.display = 'flex';
 
-        sorteio.style.display = 'none';
+        sort.style.display = 'none';
 
-        sorteio.classList.remove('ativo');
+        sort.classList.remove('ativo');
     }
 }
 
-// =========================
+// ========================
 // RELÓGIO
-// =========================
+// ========================
 
 function atualizarRelogio() {
 
@@ -185,12 +209,12 @@ function atualizarRelogio() {
         agora.toLocaleTimeString('pt-BR');
 }
 
-// =========================
+// ========================
 // INICIALIZAÇÃO
-// =========================
+// ========================
 
+atualizarMonitorar();
 atualizarRelogio();
-atualizarDados();
 
+setInterval(atualizarMonitorar, 30000);
 setInterval(atualizarRelogio, 1000);
-setInterval(atualizarDados, 30000);
