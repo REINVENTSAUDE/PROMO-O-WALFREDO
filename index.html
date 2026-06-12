@@ -89,31 +89,25 @@
 
     </main>
 
-    <script src="script.js"></script>
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex !important; /* Força o flex */
-    justify-content: space-around;
-    align-items: center;
-    height: 60px; /* Definimos uma altura fixa para garantir visibilidade */
-    background: rgba(0, 0, 0, 0.7); /* Fundo um pouco mais opaco para destacar */
-    border-top: 1px solid var(--blue-neon);
-    z-index: 9999; /* Z-index altíssimo para ficar sobre tudo */
-    font-size: 0.9rem;
-    color: white;
-}
+<footer>
 
-.footer-item {
-    text-align: center;
-    white-space: nowrap; /* Impede que os textos quebrem a linha */
-}
+    <div class="footer-item">
+        <strong>Total de Registros</strong><br>
+        <span id="total-registros">0</span>
+    </div>
 
-/* Adicione isso para evitar que o conteúdo suma atrás do rodapé */
-body {
-    padding-bottom: 60px; 
-}
+    <div class="footer-item">
+        <strong>Última Atualização</strong><br>
+        <span id="ultima-atualizacao">--:--</span>
+    </div>
+
+    <div class="footer-item">
+        <strong>REINVENT SAÚDE</strong><br>
+        <span>Painel Oficial</span>
+    </div>
+
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
