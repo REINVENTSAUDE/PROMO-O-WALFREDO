@@ -76,6 +76,19 @@ function trocarModo(modo) {
     document.getElementById('sorteio-container').style.display = modo === 'sorteio' ? 'flex' : 'none';
     atualizarDados();
 }
+function trocarModo(modo) {
+    const dash = document.getElementById('dashboard-container');
+    const sort = document.getElementById('sorteio-container');
 
+    if (modo === 'sorteio') {
+        dash.style.display = 'none';
+        sort.style.display = 'flex'; // Garante que é flex
+        sort.classList.add('ativo');  // Ativa a exibição da busca
+    } else {
+        dash.style.display = 'flex';
+        sort.style.display = 'none';
+        sort.classList.remove('ativo'); // Esconde a busca
+    }
+}
 // Inicialização
 atualizarDados();
