@@ -6,31 +6,41 @@
     --glass: rgba(255, 255, 255, 0.05);
 }
 
+/* style.css - Ajuste de Camadas */
 body {
     margin: 0;
     height: 100vh;
+    /* Aplicamos o fundo diretamente no body e garantimos que ele não se repita */
     background: url('fundo_site.png') no-repeat center center fixed;
     background-size: cover;
     font-family: 'Segoe UI', sans-serif;
     color: white;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    position: relative; /* Necessário para o z-index funcionar */
 }
 
 .background-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
+    /* O gradiente escuro ajuda a destacar o efeito de vidro */
     background: radial-gradient(circle, rgba(0,20,50,0.6) 0%, rgba(0,5,15,0.9) 100%);
-    z-index: -1;
+    z-index: 0; /* Camada base */
 }
 
-/* Cabeçalho e Logo */
-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px 40px;
-    align-items: center;
+/* Garante que o conteúdo fique acima do overlay */
+header, #main-content, footer {
+    position: relative;
+    z-index: 1;
+}
+
+.painel {
+    /* Forçamos a transparência e o blur */
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important; /* Safari/Chrome suporte */
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 20px;
+    padding: 20px;
 }
 
 .logo { max-height: 80px !important; width: auto !important; }
