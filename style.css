@@ -11,7 +11,7 @@ body {
     margin: 0;
     height: 100vh;
     /* Aplicamos o fundo diretamente no body e garantimos que ele não se repita */
-    background: url('fundo_site.png') no-repeat center center fixed;
+    background: url('fundo_site.PNG') no-repeat center center fixed;
     background-size: cover;
     font-family: 'Segoe UI', sans-serif;
     color: white;
