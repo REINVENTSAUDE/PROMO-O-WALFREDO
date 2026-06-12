@@ -75,7 +75,7 @@ footer {
 h3 { font-size: 18px; letter-spacing: 2px; color: var(--blue-neon); }
 
 .logo {
-    max-height: 80px !important; /* Ajuste aqui o tamanho desejado (ex: 60px, 80px) */
+    max-height: 120px !important; /* Ajuste aqui o tamanho desejado (ex: 60px, 80px) */
     width: auto !important;
     display: block;
 }
