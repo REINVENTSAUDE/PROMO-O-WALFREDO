@@ -15,20 +15,31 @@ async function atualizarMonitorar() {
             .split('\n')
             .filter(l => l.trim() !== '');
 
-        const dados = linhas.slice(1);
+        const dados = linhas.slice(1).map(l => l.split(','));
 
         if (dados.length === 0) return;
 
-        const ultimaLinha = dados[dados.length - 1].split(',');
-        const penultimaLinha = dados[dados.length - 2]
-            ? dados[dados.length - 2].split(',')
-            : ["--","--","--","--"];
+        const ultimaLinha = dados[dados.length - 1];
+        const penultimaLinha = dados[dados.length - 2] || [];
 
+        // Atual = Nome do Vendedor
         document.querySelector('#monitorar-atual .nome-grande').innerText =
-            ultimaLinha[0] || "--";
+            ultimaLinha[1] || "--";
 
+        // Anterior = Nome do Vendedor
         document.querySelector('#monitorar-anterior .nome').innerText =
-            penultimaLinha[0] || "--";
+            penultimaLinha[1] || "--";
+
+        // Rodapé
+        const total = document.getElementById('total-registros');
+        if (total) {
+            total.innerText = dados.length;
+        }
+
+        const atualizacao = document.getElementById('ultima-atualizacao');
+        if (atualizacao) {
+            atualizacao.innerText = new Date().toLocaleTimeString('pt-BR');
+        }
 
     } catch (erro) {
         console.error("Erro:", erro);
@@ -71,8 +82,8 @@ async function buscarSorteio() {
 
         for (let i = 0; i < dados.length; i++) {
 
-            const dataLinha = dados[i][1];
-            const horaLinha = dados[i][2];
+            const dataLinha = dados[i][2];
+            const horaLinha = dados[i][3];
 
             if (
                 dataLinha === dataFormatada &&
@@ -107,15 +118,15 @@ async function buscarSorteio() {
 
         document.querySelector(
             '#contemplado .nome-grande'
-        ).innerText = contemplado[0];
+        ).innerText = contemplado[1] || "--";
 
         document.querySelector(
             '#contemplado .horario-grande'
-        ).innerText = `${contemplado[1]} ${contemplado[2]}`;
+        ).innerText = contemplado[3] || "--";
 
         document.getElementById(
             'cliente'
-        ).innerText = contemplado[3];
+        ).innerText = contemplado[4] || "--";
 
         // ===================
         // ANTERIOR
@@ -124,19 +135,17 @@ async function buscarSorteio() {
         document.querySelector(
             '#anterior .nome'
         ).innerText =
-            anterior ? anterior[0] : "--";
+            anterior ? anterior[1] : "--";
 
         document.querySelector(
             '#anterior .horario'
         ).innerText =
-            anterior
-                ? `${anterior[1]} ${anterior[2]}`
-                : "--";
+            anterior ? anterior[3] : "--";
 
         document.querySelector(
             '#anterior .cliente'
         ).innerText =
-            anterior ? anterior[3] : "--";
+            anterior ? anterior[4] : "--";
 
         // ===================
         // POSTERIOR
@@ -145,19 +154,17 @@ async function buscarSorteio() {
         document.querySelector(
             '#posterior .nome'
         ).innerText =
-            posterior ? posterior[0] : "--";
+            posterior ? posterior[1] : "--";
 
         document.querySelector(
             '#posterior .horario'
         ).innerText =
-            posterior
-                ? `${posterior[1]} ${posterior[2]}`
-                : "--";
+            posterior ? posterior[3] : "--";
 
         document.querySelector(
             '#posterior .cliente'
         ).innerText =
-            posterior ? posterior[3] : "--";
+            posterior ? posterior[4] : "--";
 
     } catch (erro) {
 
