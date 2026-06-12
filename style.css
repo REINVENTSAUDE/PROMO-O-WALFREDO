@@ -43,16 +43,12 @@ header { display: flex; justify-content: space-between; padding: 20px 40px; alig
 
 .controles button:hover { background: var(--blue-neon); color: black; }
 
-/* --- 3. Área de Busca Manual (Ajustada) --- */
+/* --- 3. Área de Busca Manual (Compacta e sem caixa) --- */
 .busca-manual {
     display: flex;
     gap: 10px;
     justify-content: center;
-    margin: 20px auto;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 15px;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 10px auto 30px auto;
     width: fit-content;
 }
 
@@ -76,7 +72,10 @@ header { display: flex; justify-content: space-between; padding: 20px 40px; alig
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
+    transition: 0.3s;
 }
+
+.busca-manual button:hover { background: #fff; }
 
 /* --- 4. Layout Sorteio (Blocos) --- */
 .dashboard-sorteio { 
