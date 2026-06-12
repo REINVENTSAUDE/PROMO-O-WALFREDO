@@ -113,3 +113,23 @@ header { display: flex; justify-content: space-between; padding: 20px 40px; alig
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* --- 6. Rodapé Alinhado --- */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around; /* Distribui os 3 itens com espaço igual entre eles */
+    align-items: center;
+    padding: 20px 0;
+    background: rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10; /* Garante que fique acima de tudo */
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-item {
+    text-align: center;
+}
