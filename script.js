@@ -1,73 +1,81 @@
-// CONFIGURAÇÕES
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/185Mx4xA3mzKf9c2ni7DsWLx5SQk6luuxgzQxcRdhs34/edit?usp=sharing"; // Substitua pela URL gerada pelo Google Sheets
-const DATA_SORTEIO = "11/06/2026"; // Data do dia do sorteio
-const HORARIO_SORTEIO = "10:15";   // Horário limite do sorteio
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/185Mx4xA3mzKf9c2ni7DsWLx5SQk6luuxgzQxcRdhs34/edit?usp=sharing";
+let modoAtual = 'dashboard'; // 'dashboard' ou 'sorteio'
 
-// Inicialização
-function init() {
-    atualizarPainel(); // Busca inicial
-    setInterval(atualizarPainel, 30000); // Atualiza a cada 30 segundos
-    
-    // Relógio do topo
-    setInterval(() => {
-        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-    }, 1000);
-}
+// 1. Relógio e Timer de Atualização
+setInterval(() => {
+    document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+}, 1000);
 
-async function atualizarPainel() {
+setInterval(atualizarDados, 30000);
+
+async function atualizarDados() {
     try {
         const response = await fetch(SHEET_CSV_URL);
-        const csvText = await response.text();
-        const linhas = csvText.split('\n').slice(1); // Ignora cabeçalho
+        const data = await response.text();
+        const linhas = data.split('\n').slice(1);
 
         const registros = linhas.map(linha => {
             const [ts, nome, data, hora, cliente] = linha.split(',');
-            if (!nome || !hora) return null;
-            return { nome: nome.trim(), data: data.trim(), hora: hora.trim(), cliente: cliente ? cliente.trim() : "", min: converterParaMinutos(hora.trim()) };
-        }).filter(r => r !== null && r.data === DATA_SORTEIO);
+            if (!nome || !data || !hora) return null;
+            return {
+                nome: nome.trim(),
+                data: data.trim(),
+                hora: hora.trim(),
+                cliente: cliente ? cliente.trim() : "",
+                dataSort: parseInt(data.split('/').reverse().join('')),
+                min: converterParaMinutos(hora.trim())
+            };
+        }).filter(r => r !== null);
 
-        // Ordena por horário
-        registros.sort((a, b) => a.min - b.min);
+        // ORDENAÇÃO GLOBAL (Data + Horário)
+        registros.sort((a, b) => a.dataSort - b.dataSort || a.min - b.min);
 
-        // Lógica do Contemplado (último <= horário sorteado)
-        const sorteioMin = converterParaMinutos(HORARIO_SORTEIO);
+        renderizar(registros);
+    } catch (e) { console.error("Erro ao buscar dados", e); }
+}
+
+function renderizar(registros) {
+    if (modoAtual === 'dashboard') {
+        // Exibe o último como destaque e os anteriores como lista
+        const ultimo = registros[registros.length - 1];
+        document.getElementById('dashboard-container').innerHTML = `
+            <div class="destaque-maior fade-in">
+                <h1>ÚLTIMO REGISTRO: ${ultimo.nome}</h1>
+                <p>${ultimo.hora} - ${ultimo.cliente}</p>
+            </div>
+        `;
+    } else {
+        // Lógica de Sorteio (Anterior / Contemplado / Posterior)
+        const dataBusca = document.getElementById('input-data').value.split('-').reverse().join('/');
+        const horaBusca = document.getElementById('input-hora').value;
+        const sorteioMin = converterParaMinutos(horaBusca);
+        
+        const registrosDoDia = registros.filter(r => r.data === dataBusca);
         let idx = -1;
-        for (let i = 0; i < registros.length; i++) {
-            if (registros[i].min <= sorteioMin) idx = i;
-            else break;
+        for (let i = 0; i < registrosDoDia.length; i++) {
+            if (registrosDoDia[i].min <= sorteioMin) idx = i;
         }
 
-        renderizar(
-            registros[idx - 1] || { nome: "---", hora: "--:--" },
-            registros[idx] || { nome: "AGUARDANDO", hora: "--:--", cliente: "---" },
-            registros[idx + 1] || { nome: "---", hora: "--:--" }
+        renderizarSorteio(
+            registrosDoDia[idx - 1] || { nome: "---", hora: "--:--" },
+            registrosDoDia[idx] || { nome: "SEM DADOS", hora: "--:--", cliente: "---" },
+            registrosDoDia[idx + 1] || { nome: "---", hora: "--:--" }
         );
-
-    } catch (e) {
-        console.error("Erro ao buscar dados:", e);
     }
 }
 
-function renderizar(ant, cont, post) {
-    // Painel Anterior
-    document.querySelector('#anterior .nome').innerText = ant.nome;
-    document.querySelector('#anterior .horario').innerText = ant.hora;
-
-    // Painel Central (Contemplado)
-    document.querySelector('.central .nome-grande').innerText = cont.nome;
-    document.querySelector('.central .horario-grande').innerText = cont.hora;
-    document.getElementById('cliente').innerText = cont.cliente;
-    document.getElementById('data-consulta').innerText = DATA_SORTEIO;
-
-    // Painel Posterior
-    document.querySelector('#posterior .nome').innerText = post.nome;
-    document.querySelector('#posterior .horario').innerText = post.hora;
-}
-
-function converterParaMinutos(horaString) {
-    const [h, m] = horaString.split(':').map(Number);
+function converterParaMinutos(hStr) {
+    const [h, m] = hStr.split(':').map(Number);
     return (h * 60) + m;
 }
 
-// Iniciar sistema
-init();
+// Alternar Modos
+function trocarModo(modo) {
+    modoAtual = modo;
+    document.getElementById('dashboard-container').style.display = modo === 'dashboard' ? 'block' : 'none';
+    document.getElementById('sorteio-container').style.display = modo === 'sorteio' ? 'flex' : 'none';
+    atualizarDados();
+}
+
+// Inicialização
+atualizarDados();
