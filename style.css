@@ -3,82 +3,73 @@
     --bg-dark: #00050f;
     --blue-neon: #00d4ff;
     --orange-neon: #ff9d00;
-    --glass: rgba(255, 255, 255, 0.05);
+    --glass: rgba(255, 255, 255, 0.08);
 }
 
-/* style.css - Ajuste de Camadas */
 body {
     margin: 0;
     height: 100vh;
-    /* Aplicamos o fundo diretamente no body e garantimos que ele não se repita */
-    background: url('fundo_site.PNG') no-repeat center center fixed;
+    background: url('fundo.site.PNG') no-repeat center center fixed;
     background-size: cover;
     font-family: 'Segoe UI', sans-serif;
     color: white;
     overflow: hidden;
-    position: relative; /* Necessário para o z-index funcionar */
+    position: relative;
 }
 
 .background-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    /* O gradiente escuro ajuda a destacar o efeito de vidro */
     background: radial-gradient(circle, rgba(0,20,50,0.6) 0%, rgba(0,5,15,0.9) 100%);
-    z-index: 0; /* Camada base */
+    z-index: 0;
 }
 
-/* Garante que o conteúdo fique acima do overlay */
-header, #main-content, footer {
-    position: relative;
-    z-index: 1;
-}
+header, #main-content, footer { position: relative; z-index: 1; }
 
-.painel {
-    /* Forçamos a transparência e o blur */
-    background: rgba(255, 255, 255, 0.08) !important;
-    backdrop-filter: blur(15px) !important;
-    -webkit-backdrop-filter: blur(15px) !important; /* Safari/Chrome suporte */
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 20px;
-    padding: 20px;
-}
-
+/* Cabeçalho e Botões Unificados */
+header { display: flex; justify-content: space-between; padding: 20px 40px; align-items: center; }
 .logo { max-height: 80px !important; width: auto !important; }
 
-.controles button {
-    background: rgba(255,255,255,0.1);
+.controles button, .busca-manual button, .busca-manual input {
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid var(--blue-neon);
     color: white;
-    padding: 10px 20px;
+    padding: 12px 25px;
     cursor: pointer;
-    border-radius: 5px;
-    margin: 0 5px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
 }
 
-/* Áreas de Conteúdo */
-#main-content { flex: 1; display: flex; align-items: center; justify-content: center; }
+.controles button:hover, .busca-manual button:hover { background: var(--blue-neon); color: black; }
 
-/* Dashboard Lista */
-#dashboard-container { width: 80%; text-align: center; }
-.destaque-maior { font-size: 2em; padding: 50px; background: var(--glass); border-radius: 20px; }
+/* Área de Busca Manual */
+.busca-manual {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.busca-manual input { cursor: text; background: rgba(0,0,0,0.2); }
 
-/* Layout Sorteio */
-/* Ajuste o container pai */
+/* Layout Sorteio - Blocos bem largos */
 .dashboard-sorteio { 
     display: flex; 
-    gap: 40px; /* Aumentamos o espaçamento entre elas */
-    width: 95%; 
-    height: 450px; 
-    justify-content: center; /* Centraliza o bloco inteiro na tela */
+    gap: 40px; 
+    width: 90%; 
+    height: 500px; 
+    justify-content: center; 
     align-items: center;
+    margin: 0 auto;
 }
 
-/* Ajuste as caixas individuais */
 .painel { 
-    background: rgba(255, 255, 255, 0.08) !important; 
+    background: var(--glass) !important; 
     backdrop-filter: blur(15px) !important;
-    border-radius: 20px;
-    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 25px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -86,30 +77,16 @@ header, #main-content, footer {
     box-sizing: border-box;
 }
 
-/* A MÁGICA ESTÁ AQUI: */
-/* As laterais ficam com 25% da largura da tela */
-.side { 
-    width: 25%; 
-    flex: none; /* Impede que elas fiquem estreitas demais */
-    border-bottom: 4px solid var(--blue-neon); 
-}
+.side { width: 30%; height: 350px; border-bottom: 4px solid var(--blue-neon); }
+.central { width: 40%; height: 450px; border: 2px solid var(--orange-neon); box-shadow: 0 0 30px rgba(255, 157, 0, 0.2); }
 
-/* O central fica com 40% da largura da tela */
-.central { 
-    width: 40%; 
-    flex: none; 
-    border: 2px solid var(--orange-neon);
-    box-shadow: 0 0 20px rgba(255, 157, 0, 0.3);
-}
+/* Tipografia */
+.nome-grande { font-size: 3.5rem; text-transform: uppercase; margin: 10px 0; }
+.horario-grande { font-size: 2.5rem; color: var(--orange-neon); margin: 0; }
+.nome { font-size: 1.5rem; }
 
-/* Ajuste para o texto não quebrar linha de forma estranha */
-.nome, .nome-grande { 
-    text-align: center; 
-    width: 100%; 
-    word-wrap: break-word; 
-}
 /* Efeito Fade-In */
-.fade-in { animation: fadeInAnimation 1.5s ease-in-out; }
+.fade-in { animation: fadeInAnimation 1s ease-in-out; }
 @keyframes fadeInAnimation {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
