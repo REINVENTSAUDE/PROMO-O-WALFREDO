@@ -8,12 +8,12 @@
 
 body {
     margin: 0;
-    padding: 0;
     height: 100vh;
-    background: url('fundo_site.PNG') no-repeat center center fixed;
+    background: url('fundo_site.png') no-repeat center center fixed;
     background-size: cover;
     font-family: 'Segoe UI', sans-serif;
     color: white;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
@@ -25,6 +25,7 @@ body {
     z-index: -1;
 }
 
+/* Cabeçalho e Logo */
 header {
     display: flex;
     justify-content: space-between;
@@ -32,35 +33,49 @@ header {
     align-items: center;
 }
 
-.dashboard {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    flex: 1;
-    padding: 20px;
+.logo { max-height: 80px !important; width: auto !important; }
+
+.controles button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--blue-neon);
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 5px;
 }
 
-.painel {
-    background: var(--glass);
-    backdrop-filter: blur(10px);
+/* Áreas de Conteúdo */
+#main-content { flex: 1; display: flex; align-items: center; justify-content: center; }
+
+/* Dashboard Lista */
+#dashboard-container { width: 80%; text-align: center; }
+.destaque-maior { font-size: 2em; padding: 50px; background: var(--glass); border-radius: 20px; }
+
+/* Layout Sorteio */
+.dashboard-sorteio { display: flex; gap: 20px; width: 90%; height: 60vh; }
+.painel { 
+    background: var(--glass); 
+    backdrop-filter: blur(10px); 
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    padding: 25px;
-    text-align: center;
-    transition: 0.3s;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
-
-.side { width: 25%; border-bottom: 4px solid var(--blue-neon); }
+.side { flex: 1; border-bottom: 4px solid var(--blue-neon); }
 .central { 
-    width: 40%; 
+    flex: 2; 
     border: 2px solid var(--orange-neon);
     box-shadow: 0 0 20px rgba(255, 157, 0, 0.3);
 }
 
-.nome-grande { font-size: 80px; color: white; margin: 10px 0; text-transform: uppercase; }
-.horario-grande { font-size: 60px; color: var(--orange-neon); font-weight: bold; }
+/* Tipografia */
+.nome-grande { font-size: 60px; text-transform: uppercase; margin: 0; }
+.horario-grande { font-size: 40px; color: var(--orange-neon); }
 
+/* Rodapé */
 footer {
     display: flex;
     justify-content: space-around;
@@ -69,23 +84,9 @@ footer {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.footer-item { font-size: 14px; letter-spacing: 1px; opacity: 0.8; }
-
-/* Ajustes de responsividade */
-h3 { font-size: 18px; letter-spacing: 2px; color: var(--blue-neon); }
-
-.logo {
-    max-height: 120px !important; /* Ajuste aqui o tamanho desejado (ex: 60px, 80px) */
-    width: auto !important;
-    display: block;
-}
-.fade-in {
-    animation: fadeInAnimation 1.5s ease-in-out;
-}
-
+/* Efeito Fade-In */
+.fade-in { animation: fadeInAnimation 1.5s ease-in-out; }
 @keyframes fadeInAnimation {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
-/* Aplique a classe .fade-in nos elementos que você quer que animem */
