@@ -106,3 +106,25 @@ footer {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
 }
+/* Por padrão, esconde a busca */
+#sorteio-container .busca-manual {
+    display: none;
+}
+
+/* Quando for a aba de sorteio, mostramos a busca */
+#sorteio-container.ativo .busca-manual {
+    display: flex;
+}
+
+/* Ajuste para ter apenas 2 blocos no Monitorar */
+#dashboard-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    width: 100%;
+}
+
+.painel-monitorar {
+    width: 40%; /* Blocos mais largos para compensar serem apenas dois */
+    height: 400px;
+}
