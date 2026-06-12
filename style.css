@@ -1,6 +1,5 @@
-/* style.css */
+/* --- 1. Estrutura Base --- */
 :root {
-    --bg-dark: #00050f;
     --blue-neon: #00d4ff;
     --orange-neon: #ff9d00;
     --glass: rgba(255, 255, 255, 0.08);
@@ -26,11 +25,11 @@ body {
 
 header, #main-content, footer { position: relative; z-index: 1; }
 
-/* Cabeçalho e Botões Unificados */
+/* --- 2. Cabeçalho e Botões de Menu --- */
 header { display: flex; justify-content: space-between; padding: 20px 40px; align-items: center; }
 .logo { max-height: 80px !important; width: auto !important; }
 
-.controles button, .busca-manual button, .busca-manual input {
+.controles button {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid var(--blue-neon);
     color: white;
@@ -42,18 +41,44 @@ header { display: flex; justify-content: space-between; padding: 20px 40px; alig
     transition: 0.3s;
 }
 
-.controles button:hover, .busca-manual button:hover { background: var(--blue-neon); color: black; }
+.controles button:hover { background: var(--blue-neon); color: black; }
 
-/* Área de Busca Manual */
+/* --- 3. Área de Busca Manual (Ajustada) --- */
 .busca-manual {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     justify-content: center;
-    margin-bottom: 30px;
+    margin: 20px auto;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: fit-content;
 }
-.busca-manual input { cursor: text; background: rgba(0,0,0,0.2); }
 
-/* Layout Sorteio - Blocos bem largos */
+.busca-manual input {
+    height: 40px;
+    padding: 0 15px;
+    border-radius: 5px;
+    border: 1px solid var(--blue-neon);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+}
+
+.busca-manual button {
+    height: 40px;
+    padding: 0 25px;
+    background: var(--orange-neon);
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+/* --- 4. Layout Sorteio (Blocos) --- */
 .dashboard-sorteio { 
     display: flex; 
     gap: 40px; 
@@ -67,6 +92,7 @@ header { display: flex; justify-content: space-between; padding: 20px 40px; alig
 .painel { 
     background: var(--glass) !important; 
     backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 25px;
     padding: 40px;
@@ -80,12 +106,9 @@ header { display: flex; justify-content: space-between; padding: 20px 40px; alig
 .side { width: 30%; height: 350px; border-bottom: 4px solid var(--blue-neon); }
 .central { width: 40%; height: 450px; border: 2px solid var(--orange-neon); box-shadow: 0 0 30px rgba(255, 157, 0, 0.2); }
 
-/* Tipografia */
+/* --- 5. Tipografia e Animação --- */
 .nome-grande { font-size: 3.5rem; text-transform: uppercase; margin: 10px 0; }
 .horario-grande { font-size: 2.5rem; color: var(--orange-neon); margin: 0; }
-.nome { font-size: 1.5rem; }
-
-/* Efeito Fade-In */
 .fade-in { animation: fadeInAnimation 1s ease-in-out; }
 @keyframes fadeInAnimation {
     from { opacity: 0; transform: translateY(20px); }
