@@ -1,4 +1,4 @@
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/185Mx4xA3mzKf9c2ni7DsWLx5SQk6luuxgzQxcRdhs34/edit?usp=sharing";
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS88kNt-4n-CG_qsh1rl-G6DrZwJdFQNQ58711RlaDHNGympfu0m4GgJhUQv8PlrWx92yrudimbdu96/pub?gid=2072951796&single=true&output=csv";
 let modoAtual = 'dashboard'; // 'dashboard' ou 'sorteio'
 
 // 1. Relógio e Timer de Atualização
