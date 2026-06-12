@@ -1,4 +1,7 @@
-/* --- 1. Estrutura Base --- */
+/* =========================
+   1. ESTRUTURA BASE
+========================= */
+
 :root {
     --blue-neon: #00d4ff;
     --orange-neon: #ff9d00;
@@ -18,113 +21,236 @@ body {
 
 .background-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle, rgba(0,20,50,0.6) 0%, rgba(0,5,15,0.9) 100%);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle,
+        rgba(0,20,50,0.6) 0%,
+        rgba(0,5,15,0.9) 100%
+    );
     z-index: 0;
 }
 
-header, #main-content, footer { position: relative; z-index: 1; }
-
-/* --- 2. Cabeçalho --- */
-header { display: flex; justify-content: space-between; padding: 20px 40px; align-items: center; }
-.logo { max-height: 80px !important; width: auto !important; }
-.controles button { background: rgba(255, 255, 255, 0.1); border: 1px solid var(--blue-neon); color: white; padding: 12px 25px; cursor: pointer; border-radius: 8px; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
-.controles button:hover { background: var(--blue-neon); color: black; }
-
-/* --- 3. Container Principal (Empilhamento Vertical) --- */
-#main-content { 
-    display: flex !important; 
-    flex-direction: column !important; 
-    align-items: center !important; 
-    justify-content: flex-start !important; 
-    width: 100% !important;
-    padding-top: 30px !important;
-}
-#sorteio-container {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    width: 100% !important;
+header,
+#main-content {
+    position: relative;
+    z-index: 1;
 }
 
-/* --- 4. Busca Manual (No topo) --- */
-.busca-manual {
+/* =========================
+   2. CABEÇALHO
+========================= */
+
+header {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+}
+
+.logo {
+    max-height: 80px;
+    width: auto;
+}
+
+.controles button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--blue-neon);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.controles button:hover {
+    background: var(--blue-neon);
+    color: black;
+}
+
+#clock {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* =========================
+   3. CONTEÚDO PRINCIPAL
+========================= */
+
+#main-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* =========================
+   4. MONITORAR
+========================= */
+
+#dashboard-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    width: 100%;
+    margin-top: 40px;
+}
+
+.painel-monitorar {
+    width: 42%;
+    max-width: 700px;
+    height: 470px;
+}
+
+/* =========================
+   5. SORTEIO
+========================= */
+
+#sorteio-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#sorteio-container.ativo {
+    display: flex;
+}
+
+.busca-manual {
+    display: none;
     gap: 10px;
     justify-content: center;
     margin-bottom: 30px;
 }
-.busca-manual input { height: 40px; padding: 0 15px; border-radius: 5px; border: 1px solid var(--blue-neon); background: rgba(255, 255, 255, 0.1); color: white; font-size: 1rem; }
-.busca-manual button { height: 40px; padding: 0 25px; background: var(--orange-neon); color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-.busca-manual button:hover { background: #fff; }
 
-/* --- 5. Layout Sorteio (Blocos) --- */
-.dashboard-sorteio { 
-    display: flex; 
-    gap: 30px; 
-    width: 90%; 
-    max-width: 1200px;
-    height: 450px; 
-    justify-content: center; 
-    align-items: center;
-    margin: 0 auto;
-}
-
-.painel { 
-    background: var(--glass) !important; 
-    backdrop-filter: blur(15px) !important;
-    -webkit-backdrop-filter: blur(15px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 25px;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-}
-
-.side { width: 30%; height: 350px; border-bottom: 4px solid var(--blue-neon); }
-.central { width: 40%; height: 450px; border: 2px solid var(--orange-neon); box-shadow: 0 0 30px rgba(255, 157, 0, 0.2); }
-
-/* --- 6. Tipografia --- */
-.nome-grande { font-size: 3.5rem; text-transform: uppercase; margin: 10px 0; }
-.horario-grande { font-size: 2.5rem; color: var(--orange-neon); margin: 0; }
-.nome { font-size: 1.5rem; }
-
-/* --- 7. Rodapé --- */
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    padding: 20px 0;
-    background: rgba(0, 0, 0, 0.4);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 10;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-}
-/* Por padrão, esconde a busca */
-#sorteio-container .busca-manual {
-    display: none;
-}
-
-/* Quando for a aba de sorteio, mostramos a busca */
 #sorteio-container.ativo .busca-manual {
     display: flex;
 }
 
-/* Ajuste para ter apenas 2 blocos no Monitorar */
-#dashboard-container {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    width: 100%;
+.busca-manual input {
+    height: 40px;
+    padding: 0 15px;
+    border-radius: 5px;
+    border: 1px solid var(--blue-neon);
+    background: rgba(255,255,255,0.1);
+    color: white;
 }
 
-.painel-monitorar {
-    width: 40%; /* Blocos mais largos para compensar serem apenas dois */
-    height: 400px;
+.busca-manual button {
+    height: 40px;
+    padding: 0 25px;
+    border: none;
+    border-radius: 5px;
+    background: var(--orange-neon);
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* =========================
+   6. PAINÉIS
+========================= */
+
+.painel {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    border-radius: 25px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.dashboard-sorteio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+
+    width: 90%;
+    max-width: 1400px;
+}
+
+.side {
+    width: 28%;
+    height: 350px;
+    border-bottom: 4px solid var(--blue-neon);
+}
+
+.central {
+    width: 40%;
+    height: 450px;
+
+    border: 2px solid var(--orange-neon);
+
+    box-shadow: 0 0 25px rgba(255,157,0,0.25);
+}
+
+/* =========================
+   7. TEXTOS
+========================= */
+
+h3 {
+    margin-bottom: 30px;
+}
+
+.nome-grande {
+    font-size: 4rem;
+    margin: 10px 0;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.horario-grande {
+    font-size: 2.2rem;
+    color: var(--orange-neon);
+    text-align: center;
+}
+
+.nome {
+    font-size: 2rem;
+    text-align: center;
+}
+
+.horario {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.content {
+    text-align: center;
+}
+
+.info-extra {
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
+
+#cliente,
+#anterior .cliente,
+#posterior .cliente {
+    color: var(--blue-neon);
+    font-weight: bold;
+}
+
+/* =========================
+   8. RODAPÉ
+========================= */
+
+footer {
+    display: none;
 }
