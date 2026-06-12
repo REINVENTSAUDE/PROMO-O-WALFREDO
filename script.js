@@ -1,113 +1,202 @@
-// LINK DO CSV PUBLICADO
+// =========================
+// LINK DA PLANILHA CSV
+// =========================
+
 const URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS88kNt-4n-CG_qsh1rl-G6DrZwJdFQNQ58711RlaDHNGympfu0m4GgJhUQv8PlrWx92yrudimbdu96/pub?gid=2072951796&single=true&output=csv";
 
-// Função para buscar e processar os dados
+// =========================
+// BUSCAR DADOS
+// =========================
+
 async function atualizarDados() {
     try {
-        const resposta = await fetch(URL_CSV);
+
+        const resposta = await fetch(URL_CSV + "&t=" + Date.now());
         const csvText = await resposta.text();
 
-        // Limpa linhas vazias
         const linhas = csvText
             .trim()
-            .split('\n')
+            .split("\n")
             .filter(linha => linha.trim() !== "");
 
+        if (linhas.length === 0) return;
+
+        // Remove cabeçalho se existir
+        const dados = linhas.slice(1);
+
+        if (dados.length === 0) return;
+
         // Último registro
-        const ultimaLinha = linhas[linhas.length - 1]
-            ? linhas[linhas.length - 1].split(',')
+        const ultimaLinha = dados[dados.length - 1]
+            ? dados[dados.length - 1].split(",")
             : ["--", "--", "--"];
 
         // Penúltimo registro
-        const penultimaLinha = linhas[linhas.length - 2]
-            ? linhas[linhas.length - 2].split(',')
-            : ["--", "--", "--"];
-
-        // Próximo registro (se existir)
-        const posteriorLinha = linhas[linhas.length]
-            ? linhas[linhas.length].split(',')
+        const penultimaLinha = dados[dados.length - 2]
+            ? dados[dados.length - 2].split(",")
             : ["--", "--", "--"];
 
         // =========================
-        // ABA SORTEIO
+        // AJUSTE DAS COLUNAS
+        // =========================
+        // ALTERE AQUI SE NECESSÁRIO
+
+        const nomeAtual = ultimaLinha[0] || "--";
+        const dataAtual = ultimaLinha[1] || "--";
+        const clienteAtual = ultimaLinha[2] || "--";
+
+        const nomeAnterior = penultimaLinha[0] || "--";
+        const dataAnterior = penultimaLinha[1] || "--";
+        const clienteAnterior = penultimaLinha[2] || "--";
+
+        // =========================
+        // MONITORAR
         // =========================
 
+        const monitorAtual = document.querySelector(
+            "#monitorar-atual .nome-grande"
+        );
+
+        const monitorAnterior = document.querySelector(
+            "#monitorar-anterior .nome"
+        );
+
+        if (monitorAtual) {
+            monitorAtual.innerText = nomeAtual;
+        }
+
+        if (monitorAnterior) {
+            monitorAnterior.innerText = nomeAnterior;
+        }
+
+        // =========================
         // CONTEMPLADO
-        document.querySelector('#contemplado .nome-grande').innerText =
-            ultimaLinha[0] || "--";
+        // =========================
 
-        document.querySelector('#contemplado .horario-grande').innerText =
-            ultimaLinha[1] || "--";
+        const contempladoNome =
+            document.querySelector("#contemplado .nome-grande");
 
-        document.getElementById('cliente').innerText =
-            ultimaLinha[2] || "--";
+        const contempladoData =
+            document.querySelector("#contemplado .horario-grande");
 
+        const contempladoCliente =
+            document.getElementById("cliente");
+
+        if (contempladoNome) {
+            contempladoNome.innerText = nomeAtual;
+        }
+
+        if (contempladoData) {
+            contempladoData.innerText = dataAtual;
+        }
+
+        if (contempladoCliente) {
+            contempladoCliente.innerText = clienteAtual;
+        }
+
+        // =========================
         // ANTERIOR
-        document.querySelector('#anterior .nome').innerText =
-            penultimaLinha[0] || "--";
+        // =========================
 
-        document.querySelector('#anterior .horario').innerText =
-            penultimaLinha[1] || "--";
+        const anteriorNome =
+            document.querySelector("#anterior .nome");
 
-        const clienteAnterior = document.querySelector('#anterior .cliente');
-        if (clienteAnterior) {
-            clienteAnterior.innerText = penultimaLinha[2] || "--";
+        const anteriorData =
+            document.querySelector("#anterior .horario");
+
+        const anteriorCliente =
+            document.querySelector("#anterior .cliente");
+
+        if (anteriorNome) {
+            anteriorNome.innerText = nomeAnterior;
         }
 
+        if (anteriorData) {
+            anteriorData.innerText = dataAnterior;
+        }
+
+        if (anteriorCliente) {
+            anteriorCliente.innerText = clienteAnterior;
+        }
+
+        // =========================
         // POSTERIOR
-        document.querySelector('#posterior .nome').innerText =
-            posteriorLinha[0] || "--";
+        // =========================
 
-        document.querySelector('#posterior .horario').innerText =
-            posteriorLinha[1] || "--";
+        const posteriorNome =
+            document.querySelector("#posterior .nome");
 
-        const clientePosterior = document.querySelector('#posterior .cliente');
-        if (clientePosterior) {
-            clientePosterior.innerText = posteriorLinha[2] || "--";
+        const posteriorData =
+            document.querySelector("#posterior .horario");
+
+        const posteriorCliente =
+            document.querySelector("#posterior .cliente");
+
+        if (posteriorNome) {
+            posteriorNome.innerText = "--";
         }
 
-        // =========================
-        // ABA MONITORAR
-        // =========================
+        if (posteriorData) {
+            posteriorData.innerText = "--";
+        }
 
-        document.querySelector('#monitorar-atual .nome-grande').innerText =
-            ultimaLinha[0] || "--";
-
-        document.querySelector('#monitorar-anterior .nome').innerText =
-            penultimaLinha[0] || "--";
+        if (posteriorCliente) {
+            posteriorCliente.innerText = "--";
+        }
 
     } catch (erro) {
         console.error("Erro ao buscar dados:", erro);
     }
 }
 
-// Troca de telas
-function trocarModo(modo) {
-    const dash = document.getElementById('dashboard-container');
-    const sort = document.getElementById('sorteio-container');
+// =========================
+// TROCAR TELA
+// =========================
 
-    if (modo === 'sorteio') {
-        dash.style.display = 'none';
-        sort.style.display = 'flex';
-        sort.classList.add('ativo');
+function trocarModo(modo) {
+
+    const dashboard =
+        document.getElementById("dashboard-container");
+
+    const sorteio =
+        document.getElementById("sorteio-container");
+
+    if (modo === "sorteio") {
+
+        dashboard.style.display = "none";
+
+        sorteio.style.display = "flex";
+
+        sorteio.classList.add("ativo");
+
     } else {
-        dash.style.display = 'flex';
-        sort.style.display = 'none';
-        sort.classList.remove('ativo');
+
+        dashboard.style.display = "flex";
+
+        sorteio.style.display = "none";
+
+        sorteio.classList.remove("ativo");
     }
 }
 
-// Relógio
+// =========================
+// RELÓGIO
+// =========================
+
 function atualizarRelogio() {
+
     const agora = new Date();
 
-    document.getElementById('clock').innerText =
-        agora.toLocaleTimeString('pt-BR');
+    document.getElementById("clock").innerText =
+        agora.toLocaleTimeString("pt-BR");
 }
 
-// Inicialização
-setInterval(atualizarRelogio, 1000);
-setInterval(atualizarDados, 30000);
+// =========================
+// INICIALIZAÇÃO
+// =========================
 
 atualizarRelogio();
 atualizarDados();
+
+setInterval(atualizarRelogio, 1000);
+setInterval(atualizarDados, 30000);
