@@ -7,10 +7,10 @@
 </head>
 <body>
     <div class="background-overlay"></div>
-    
+
     <header>
         <img src="logo.png" alt="Logo Reinvent Saúde" class="logo">
-        
+
         <nav class="controles">
             <button onclick="trocarModo('dashboard')">MONITORAR DIA</button>
             <button onclick="trocarModo('sorteio')">SORTEAR</button>
@@ -20,18 +20,25 @@
     </header>
 
     <main id="main-content">
+
+        <!-- MONITORAR -->
         <section id="dashboard-container" class="fade-in">
+
             <div class="painel painel-monitorar" id="monitorar-atual">
                 <h3>ATUAL</h3>
                 <h1 class="nome-grande">--</h1>
             </div>
+
             <div class="painel painel-monitorar" id="monitorar-anterior">
                 <h3>ANTERIOR</h3>
                 <h2 class="nome">--</h2>
             </div>
+
         </section>
 
+        <!-- SORTEIO -->
         <section id="sorteio-container" style="display:none;" class="fade-in">
+
             <div class="busca-manual">
                 <input type="date" id="input-data">
                 <input type="time" id="input-hora">
@@ -39,34 +46,50 @@
             </div>
 
             <div class="dashboard-sorteio">
+
+                <!-- ANTERIOR -->
                 <div class="painel side" id="anterior">
                     <h3>ANTERIOR</h3>
-                    <div class="content"><h2 class="nome">--</h2><p class="horario">--</p></div>
+
+                    <div class="content">
+                        <h2 class="nome">--</h2>
+                        <p class="horario">--</p>
+                        <p>Cliente: <span class="cliente">--</span></p>
+                    </div>
                 </div>
+
+                <!-- CONTEMPLADO -->
                 <div class="painel central" id="contemplado">
                     <h3>CONTEMPLADO</h3>
+
                     <div class="content">
                         <h1 class="nome-grande">--</h1>
                         <p class="horario-grande">--</p>
+
                         <div class="info-extra">
                             <p>Cliente: <span id="cliente">--</span></p>
                         </div>
                     </div>
                 </div>
+
+                <!-- POSTERIOR -->
                 <div class="painel side" id="posterior">
                     <h3>POSTERIOR</h3>
-                    <div class="content"><h2 class="nome">--</h2><p class="horario">--</p></div>
+
+                    <div class="content">
+                        <h2 class="nome">--</h2>
+                        <p class="horario">--</p>
+                        <p>Cliente: <span class="cliente">--</span></p>
+                    </div>
                 </div>
+
             </div>
+
         </section>
+
     </main>
 
-    <footer>
-        <div class="footer-item">🛡️ TRANSPARÊNCIA É O NOSSO COMPROMISSO</div>
-        <div class="footer-item">👥 VALORIZAMOS QUEM FAZ ACONTECER</div>
-        <div class="footer-item">🏆 PARABÉNS A TODOS OS PARTICIPANTES!</div>
-    </footer>
-
     <script src="script.js"></script>
+
 </body>
 </html>
