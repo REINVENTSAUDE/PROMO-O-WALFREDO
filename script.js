@@ -1,5 +1,5 @@
 // CONFIGURAÇÕES
-const SHEET_CSV_URL = "URL_DO_SEU_CSV_AQUI"; // Substitua pela URL gerada pelo Google Sheets
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/185Mx4xA3mzKf9c2ni7DsWLx5SQk6luuxgzQxcRdhs34/edit?usp=sharing"; // Substitua pela URL gerada pelo Google Sheets
 const DATA_SORTEIO = "11/06/2026"; // Data do dia do sorteio
 const HORARIO_SORTEIO = "10:15";   // Horário limite do sorteio
 
