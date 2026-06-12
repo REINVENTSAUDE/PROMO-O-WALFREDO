@@ -22,7 +22,7 @@ async function atualizarMonitorar() {
         const ultimaLinha = dados[dados.length - 1];
         const penultimaLinha = dados[dados.length - 2] || [];
 
-        // Atual = Nome do Vendedor
+        // A grana está com = Nome do Vendedor
         document.querySelector('#monitorar-atual .nome-grande').innerText =
             ultimaLinha[1] || "--";
 
