@@ -63,37 +63,51 @@ header, #main-content, footer {
 .destaque-maior { font-size: 2em; padding: 50px; background: var(--glass); border-radius: 20px; }
 
 /* Layout Sorteio */
-.dashboard-sorteio { display: flex; gap: 20px; width: 90%; height: 60vh; }
+/* Ajuste o container pai */
+.dashboard-sorteio { 
+    display: flex; 
+    gap: 40px; /* Aumentamos o espaçamento entre elas */
+    width: 95%; 
+    height: 450px; 
+    justify-content: center; /* Centraliza o bloco inteiro na tela */
+    align-items: center;
+}
+
+/* Ajuste as caixas individuais */
 .painel { 
-    background: var(--glass); 
-    backdrop-filter: blur(10px); 
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08) !important; 
+    backdrop-filter: blur(15px) !important;
     border-radius: 20px;
-    padding: 20px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
-.side { flex: 1; border-bottom: 4px solid var(--blue-neon); }
+
+/* A MÁGICA ESTÁ AQUI: */
+/* As laterais ficam com 25% da largura da tela */
+.side { 
+    width: 25%; 
+    flex: none; /* Impede que elas fiquem estreitas demais */
+    border-bottom: 4px solid var(--blue-neon); 
+}
+
+/* O central fica com 40% da largura da tela */
 .central { 
-    flex: 2; 
+    width: 40%; 
+    flex: none; 
     border: 2px solid var(--orange-neon);
     box-shadow: 0 0 20px rgba(255, 157, 0, 0.3);
 }
 
-/* Tipografia */
-.nome-grande { font-size: 60px; text-transform: uppercase; margin: 0; }
-.horario-grande { font-size: 40px; color: var(--orange-neon); }
-
-/* Rodapé */
-footer {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.4);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+/* Ajuste para o texto não quebrar linha de forma estranha */
+.nome, .nome-grande { 
+    text-align: center; 
+    width: 100%; 
+    word-wrap: break-word; 
 }
-
 /* Efeito Fade-In */
 .fade-in { animation: fadeInAnimation 1.5s ease-in-out; }
 @keyframes fadeInAnimation {
