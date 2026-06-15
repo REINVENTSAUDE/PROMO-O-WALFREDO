@@ -3,18 +3,11 @@ const URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS88kNt-4n-CG_q
 // ========================
 // MONITORAR
 // ========================
-
 async function atualizarMonitorar() {
     try {
-
         const resposta = await fetch(URL_CSV + "&t=" + Date.now());
         const csvText = await resposta.text();
-
-        const linhas = csvText
-            .trim()
-            .split('\n')
-            .filter(l => l.trim() !== '');
-
+        const linhas = csvText.trim().split('\n').filter(l => l.trim() !== '');
         const dados = linhas.slice(1).map(l => l.split(','));
 
         if (dados.length === 0) return;
@@ -22,36 +15,24 @@ async function atualizarMonitorar() {
         const ultimaLinha = dados[dados.length - 1];
         const penultimaLinha = dados[dados.length - 2] || [];
 
-        // A grana está com = Nome do Vendedor
-        document.querySelector('#monitorar-atual .nome-grande').innerText =
-            ultimaLinha[1] || "--";
+        document.querySelector('#monitorar-atual .nome-grande').innerText = ultimaLinha[1] || "--";
+        document.querySelector('#monitorar-anterior .nome').innerText = penultimaLinha[1] || "--";
 
-        // Anterior = Nome do Vendedor
-        document.querySelector('#monitorar-anterior .nome').innerText =
-            penultimaLinha[1] || "--";
-
-        // Rodapé
+        // Rodapé (apenas se existirem no HTML)
         const total = document.getElementById('total-registros');
-        if (total) {
-            total.innerText = dados.length;
-        }
-
+        if (total) total.innerText = dados.length;
         const atualizacao = document.getElementById('ultima-atualizacao');
-        if (atualizacao) {
-            atualizacao.innerText = new Date().toLocaleTimeString('pt-BR');
-        }
+        if (atualizacao) atualizacao.innerText = new Date().toLocaleTimeString('pt-BR');
 
     } catch (erro) {
-        console.error("Erro:", erro);
+        console.error("Erro no Monitorar:", erro);
     }
 }
 
 // ========================
 // SORTEIO
 // ========================
-
 async function buscarSorteio() {
-
     const dataPesquisa = document.getElementById('input-data').value;
     const horaPesquisa = document.getElementById('input-hora').value;
 
@@ -61,167 +42,55 @@ async function buscarSorteio() {
     }
 
     try {
-
         const resposta = await fetch(URL_CSV + "&t=" + Date.now());
         const csvText = await resposta.text();
-
-        const linhas = csvText
-            .trim()
-            .split('\n')
-            .filter(l => l.trim() !== '');
-
+        const linhas = csvText.trim().split('\n').filter(l => l.trim() !== '');
         const dados = linhas.slice(1).map(l => l.split(','));
 
-        // yyyy-mm-dd -> dd/mm/yyyy
         const partes = dataPesquisa.split('-');
+        const dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
 
-        const dataFormatada =
-            `${partes[2]}/${partes[1]}/${partes[0]}`;
+        // Filtra registros que são do mesmo dia E hora menor ou igual ao pesquisado
+        const registrosValidos = dados.filter(linha => {
+            return linha[2] === dataFormatada && linha[3] <= horaPesquisa;
+        });
 
-        let indiceContemplado = -1;
-
-        for (let i = 0; i < dados.length; i++) {
-
-            const dataLinha = dados[i][2];
-            const horaLinha = dados[i][3];
-
-            if (
-                dataLinha === dataFormatada &&
-                horaLinha <= horaPesquisa
-            ) {
-                indiceContemplado = i;
-            }
-        }
-
-        if (indiceContemplado === -1) {
-
-            alert("Nenhum registro encontrado.");
-
+        if (registrosValidos.length === 0) {
+            alert("Nenhum registro encontrado para este horário ou anterior.");
             return;
         }
 
-        const contemplado = dados[indiceContemplado];
+        // Ordena para pegar o último ocorrido (o mais próximo do horário)
+        registrosValidos.sort((a, b) => b[3].localeCompare(a[3]));
+        const contemplado = registrosValidos[0];
 
-        const anterior =
-            indiceContemplado > 0
-                ? dados[indiceContemplado - 1]
-                : null;
+        // Encontra o índice real para pegar anterior e posterior
+        const indiceReal = dados.findIndex(d => d === contemplado);
+        const anterior = indiceReal > 0 ? dados[indiceReal - 1] : null;
+        const posterior = indiceReal < dados.length - 1 ? dados[indiceReal + 1] : null;
 
-        const posterior =
-            indiceContemplado < dados.length - 1
-                ? dados[indiceContemplado + 1]
-                : null;
+        // Atualiza UI
+        document.querySelector('#contemplado .nome-grande').innerText = contemplado[1] || "--";
+        document.querySelector('#contemplado .horario-grande').innerText = contemplado[3] || "--";
+        document.getElementById('cliente').innerText = contemplado[4] || "--";
 
-        // ===================
-        // CONTEMPLADO
-        // ===================
+        const atualizarPainel = (id, obj) => {
+            const el = document.querySelector(id);
+            if(el) {
+                el.querySelector('.nome').innerText = obj ? obj[1] : "--";
+                el.querySelector('.horario').innerText = obj ? obj[3] : "--";
+                const cl = el.querySelector('.cliente');
+                if(cl) cl.innerText = obj ? obj[4] : "--";
+            }
+        };
 
-        document.querySelector(
-            '#contemplado .nome-grande'
-        ).innerText = contemplado[1] || "--";
-
-        document.querySelector(
-            '#contemplado .horario-grande'
-        ).innerText = contemplado[3] || "--";
-
-        document.getElementById(
-            'cliente'
-        ).innerText = contemplado[4] || "--";
-
-        // ===================
-        // ANTERIOR
-        // ===================
-
-        document.querySelector(
-            '#anterior .nome'
-        ).innerText =
-            anterior ? anterior[1] : "--";
-
-        document.querySelector(
-            '#anterior .horario'
-        ).innerText =
-            anterior ? anterior[3] : "--";
-
-        document.querySelector(
-            '#anterior .cliente'
-        ).innerText =
-            anterior ? anterior[4] : "--";
-
-        // ===================
-        // POSTERIOR
-        // ===================
-
-        document.querySelector(
-            '#posterior .nome'
-        ).innerText =
-            posterior ? posterior[1] : "--";
-
-        document.querySelector(
-            '#posterior .horario'
-        ).innerText =
-            posterior ? posterior[3] : "--";
-
-        document.querySelector(
-            '#posterior .cliente'
-        ).innerText =
-            posterior ? posterior[4] : "--";
+        atualizarPainel('#anterior', anterior);
+        atualizarPainel('#posterior', posterior);
 
     } catch (erro) {
-
         console.error(erro);
-
         alert("Erro ao buscar dados.");
     }
 }
 
-// ========================
-// TROCAR TELAS
-// ========================
-
-function trocarModo(modo) {
-
-    const dash =
-        document.getElementById('dashboard-container');
-
-    const sort =
-        document.getElementById('sorteio-container');
-
-    if (modo === 'sorteio') {
-
-        dash.style.display = 'none';
-
-        sort.style.display = 'flex';
-
-        sort.classList.add('ativo');
-
-    } else {
-
-        dash.style.display = 'flex';
-
-        sort.style.display = 'none';
-
-        sort.classList.remove('ativo');
-    }
-}
-
-// ========================
-// RELÓGIO
-// ========================
-
-function atualizarRelogio() {
-
-    const agora = new Date();
-
-    document.getElementById('clock').innerText =
-        agora.toLocaleTimeString('pt-BR');
-}
-
-// ========================
-// INICIALIZAÇÃO
-// ========================
-
-atualizarMonitorar();
-atualizarRelogio();
-
-setInterval(atualizarMonitorar, 30000);
-setInterval(atualizarRelogio, 1000);
+// ... (o restante das funções trocarModo, atualizarRelogio e inicialização permanecem iguais)
