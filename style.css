@@ -107,6 +107,17 @@ header {
     height: 470px;
 }
 
+#monitorar-anterior {
+    order: 1;
+    width: 24%;
+    max-width: 380px;
+    height: 300px;
+}
+
+#monitorar-atual {
+    order: 2;
+}
+
 /* =========================
    5. SORTEIO
 ========================= */
