@@ -100,6 +100,24 @@ async function atualizarMonitorar() {
 
 // ========================
 
+function converterHoraParaMinutos(hora) {
+
+    if (!hora) return null;
+
+    const partes = hora.trim().split(':');
+
+    if (partes.length < 2) return null;
+
+    const horas = Number(partes[0]);
+
+    const minutos = Number(partes[1]);
+
+    if (Number.isNaN(horas) || Number.isNaN(minutos)) return null;
+
+    return (horas * 60) + minutos;
+
+}
+
 
 
 async function buscarSorteio() {
@@ -158,29 +176,28 @@ async function buscarSorteio() {
 
 
 
+        const horaPesquisaMinutos = converterHoraParaMinutos(horaPesquisa);
+
+        const registrosDaData = dados
+            .filter(linha => linha[2] === dataFormatada)
+            .map(linha => ({
+                linha,
+                horaMinutos: converterHoraParaMinutos(linha[3])
+            }))
+            .filter(registro => registro.horaMinutos !== null)
+            .sort((a, b) => a.horaMinutos - b.horaMinutos);
+
         let indiceContemplado = -1;
 
+        for (let i = 0; i < registrosDaData.length; i++) {
 
-
-        for (let i = 0; i < dados.length; i++) {
-
-
-
-            const dataLinha = dados[i][2];
-
-            const horaLinha = dados[i][3];
-
-
-
-            if (
-
-                dataLinha === dataFormatada &&
-
-                horaLinha <= horaPesquisa
-
-            ) {
+            if (registrosDaData[i].horaMinutos <= horaPesquisaMinutos) {
 
                 indiceContemplado = i;
+
+            } else {
+
+                break;
 
             }
 
@@ -202,7 +219,7 @@ async function buscarSorteio() {
 
 
 
-        const contemplado = dados[indiceContemplado];
+        const contemplado = registrosDaData[indiceContemplado].linha;
 
 
 
@@ -210,7 +227,7 @@ async function buscarSorteio() {
 
             indiceContemplado > 0
 
-                ? dados[indiceContemplado - 1]
+                ? registrosDaData[indiceContemplado - 1].linha
 
                 : null;
 
@@ -218,9 +235,9 @@ async function buscarSorteio() {
 
         const posterior =
 
-            indiceContemplado < dados.length - 1
+            indiceContemplado < registrosDaData.length - 1
 
-                ? dados[indiceContemplado + 1]
+                ? registrosDaData[indiceContemplado + 1].linha
 
                 : null;
 
